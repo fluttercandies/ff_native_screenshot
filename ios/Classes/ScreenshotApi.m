@@ -32,47 +32,47 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
 
 
 
-@interface FLTFlutterScreenshotApiCodecReader : FlutterStandardReader
+@interface FLTScreenshotHostApiCodecReader : FlutterStandardReader
 @end
-@implementation FLTFlutterScreenshotApiCodecReader
-@end
-
-@interface FLTFlutterScreenshotApiCodecWriter : FlutterStandardWriter
-@end
-@implementation FLTFlutterScreenshotApiCodecWriter
+@implementation FLTScreenshotHostApiCodecReader
 @end
 
-@interface FLTFlutterScreenshotApiCodecReaderWriter : FlutterStandardReaderWriter
+@interface FLTScreenshotHostApiCodecWriter : FlutterStandardWriter
 @end
-@implementation FLTFlutterScreenshotApiCodecReaderWriter
+@implementation FLTScreenshotHostApiCodecWriter
+@end
+
+@interface FLTScreenshotHostApiCodecReaderWriter : FlutterStandardReaderWriter
+@end
+@implementation FLTScreenshotHostApiCodecReaderWriter
 - (FlutterStandardWriter *)writerWithData:(NSMutableData *)data {
-  return [[FLTFlutterScreenshotApiCodecWriter alloc] initWithData:data];
+  return [[FLTScreenshotHostApiCodecWriter alloc] initWithData:data];
 }
 - (FlutterStandardReader *)readerWithData:(NSData *)data {
-  return [[FLTFlutterScreenshotApiCodecReader alloc] initWithData:data];
+  return [[FLTScreenshotHostApiCodecReader alloc] initWithData:data];
 }
 @end
 
-NSObject<FlutterMessageCodec> *FLTFlutterScreenshotApiGetCodec() {
+NSObject<FlutterMessageCodec> *FLTScreenshotHostApiGetCodec() {
   static dispatch_once_t sPred = 0;
   static FlutterStandardMessageCodec *sSharedObject = nil;
   dispatch_once(&sPred, ^{
-    FLTFlutterScreenshotApiCodecReaderWriter *readerWriter = [[FLTFlutterScreenshotApiCodecReaderWriter alloc] init];
+    FLTScreenshotHostApiCodecReaderWriter *readerWriter = [[FLTScreenshotHostApiCodecReaderWriter alloc] init];
     sSharedObject = [FlutterStandardMessageCodec codecWithReaderWriter:readerWriter];
   });
   return sSharedObject;
 }
 
 
-void FLTFlutterScreenshotApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLTFlutterScreenshotApi> *api) {
+void FLTScreenshotHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLTScreenshotHostApi> *api) {
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.FlutterScreenshotApi.takeScreenshot"
+        initWithName:@"dev.flutter.pigeon.ScreenshotHostApi.takeScreenshot"
         binaryMessenger:binaryMessenger
-        codec:FLTFlutterScreenshotApiGetCodec()        ];
+        codec:FLTScreenshotHostApiGetCodec()        ];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(takeScreenshotWithCompletion:)], @"FLTFlutterScreenshotApi api (%@) doesn't respond to @selector(takeScreenshotWithCompletion:)", api);
+      NSCAssert([api respondsToSelector:@selector(takeScreenshotWithCompletion:)], @"FLTScreenshotHostApi api (%@) doesn't respond to @selector(takeScreenshotWithCompletion:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         [api takeScreenshotWithCompletion:^(FlutterStandardTypedData *_Nullable output, FlutterError *_Nullable error) {
           callback(wrapResult(output, error));
@@ -86,11 +86,11 @@ void FLTFlutterScreenshotApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NS
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.FlutterScreenshotApi.startListeningScreenshot"
+        initWithName:@"dev.flutter.pigeon.ScreenshotHostApi.startListeningScreenshot"
         binaryMessenger:binaryMessenger
-        codec:FLTFlutterScreenshotApiGetCodec()        ];
+        codec:FLTScreenshotHostApiGetCodec()        ];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(startListeningScreenshotWithError:)], @"FLTFlutterScreenshotApi api (%@) doesn't respond to @selector(startListeningScreenshotWithError:)", api);
+      NSCAssert([api respondsToSelector:@selector(startListeningScreenshotWithError:)], @"FLTScreenshotHostApi api (%@) doesn't respond to @selector(startListeningScreenshotWithError:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         FlutterError *error;
         [api startListeningScreenshotWithError:&error];
@@ -104,11 +104,11 @@ void FLTFlutterScreenshotApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NS
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.FlutterScreenshotApi.stopListeningScreenshot"
+        initWithName:@"dev.flutter.pigeon.ScreenshotHostApi.stopListeningScreenshot"
         binaryMessenger:binaryMessenger
-        codec:FLTFlutterScreenshotApiGetCodec()        ];
+        codec:FLTScreenshotHostApiGetCodec()        ];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(stopListeningScreenshotWithError:)], @"FLTFlutterScreenshotApi api (%@) doesn't respond to @selector(stopListeningScreenshotWithError:)", api);
+      NSCAssert([api respondsToSelector:@selector(stopListeningScreenshotWithError:)], @"FLTScreenshotHostApi api (%@) doesn't respond to @selector(stopListeningScreenshotWithError:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         FlutterError *error;
         [api stopListeningScreenshotWithError:&error];
@@ -120,43 +120,43 @@ void FLTFlutterScreenshotApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NS
     }
   }
 }
-@interface FLTNativeScreenshotApiCodecReader : FlutterStandardReader
+@interface FLTScreenshotFlutterApiCodecReader : FlutterStandardReader
 @end
-@implementation FLTNativeScreenshotApiCodecReader
-@end
-
-@interface FLTNativeScreenshotApiCodecWriter : FlutterStandardWriter
-@end
-@implementation FLTNativeScreenshotApiCodecWriter
+@implementation FLTScreenshotFlutterApiCodecReader
 @end
 
-@interface FLTNativeScreenshotApiCodecReaderWriter : FlutterStandardReaderWriter
+@interface FLTScreenshotFlutterApiCodecWriter : FlutterStandardWriter
 @end
-@implementation FLTNativeScreenshotApiCodecReaderWriter
+@implementation FLTScreenshotFlutterApiCodecWriter
+@end
+
+@interface FLTScreenshotFlutterApiCodecReaderWriter : FlutterStandardReaderWriter
+@end
+@implementation FLTScreenshotFlutterApiCodecReaderWriter
 - (FlutterStandardWriter *)writerWithData:(NSMutableData *)data {
-  return [[FLTNativeScreenshotApiCodecWriter alloc] initWithData:data];
+  return [[FLTScreenshotFlutterApiCodecWriter alloc] initWithData:data];
 }
 - (FlutterStandardReader *)readerWithData:(NSData *)data {
-  return [[FLTNativeScreenshotApiCodecReader alloc] initWithData:data];
+  return [[FLTScreenshotFlutterApiCodecReader alloc] initWithData:data];
 }
 @end
 
-NSObject<FlutterMessageCodec> *FLTNativeScreenshotApiGetCodec() {
+NSObject<FlutterMessageCodec> *FLTScreenshotFlutterApiGetCodec() {
   static dispatch_once_t sPred = 0;
   static FlutterStandardMessageCodec *sSharedObject = nil;
   dispatch_once(&sPred, ^{
-    FLTNativeScreenshotApiCodecReaderWriter *readerWriter = [[FLTNativeScreenshotApiCodecReaderWriter alloc] init];
+    FLTScreenshotFlutterApiCodecReaderWriter *readerWriter = [[FLTScreenshotFlutterApiCodecReaderWriter alloc] init];
     sSharedObject = [FlutterStandardMessageCodec codecWithReaderWriter:readerWriter];
   });
   return sSharedObject;
 }
 
 
-@interface FLTNativeScreenshotApi ()
+@interface FLTScreenshotFlutterApi ()
 @property (nonatomic, strong) NSObject<FlutterBinaryMessenger> *binaryMessenger;
 @end
 
-@implementation FLTNativeScreenshotApi
+@implementation FLTScreenshotFlutterApi
 
 - (instancetype)initWithBinaryMessenger:(NSObject<FlutterBinaryMessenger> *)binaryMessenger {
   self = [super init];
@@ -168,9 +168,9 @@ NSObject<FlutterMessageCodec> *FLTNativeScreenshotApiGetCodec() {
 - (void)onTakeScreenshotData:(nullable FlutterStandardTypedData *)arg_data completion:(void(^)(NSError *_Nullable))completion {
   FlutterBasicMessageChannel *channel =
     [FlutterBasicMessageChannel
-      messageChannelWithName:@"dev.flutter.pigeon.NativeScreenshotApi.onTakeScreenshot"
+      messageChannelWithName:@"dev.flutter.pigeon.ScreenshotFlutterApi.onTakeScreenshot"
       binaryMessenger:self.binaryMessenger
-      codec:FLTNativeScreenshotApiGetCodec()];
+      codec:FLTScreenshotFlutterApiGetCodec()];
   [channel sendMessage:@[arg_data ?: [NSNull null]] reply:^(id reply) {
     completion(nil);
   }];

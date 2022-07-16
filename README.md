@@ -26,7 +26,7 @@ Uint8List? data = await FfNativeScreenshot().takeScreenshot();
   @override
   void initState() {
     super.initState();
-    FfNativeScreenshot().setup(NativeScreenshotApiImplements());
+    FfNativeScreenshot().setup(ScreenshotFlutterApiImplements());
     FfNativeScreenshot().startListeningScreenshot();
   }
 
@@ -36,8 +36,8 @@ Uint8List? data = await FfNativeScreenshot().takeScreenshot();
     super.dispose();
   }
 
-  class NativeScreenshotApiImplements extends NativeScreenshotApi {
-    NativeScreenshotApiImplements();
+  class ScreenshotFlutterApiImplements extends ScreenshotFlutterApi {
+    ScreenshotFlutterApiImplements();
     @override
     Future<void> onTakeScreenshot(Uint8List? data) async {
      // if it has something error

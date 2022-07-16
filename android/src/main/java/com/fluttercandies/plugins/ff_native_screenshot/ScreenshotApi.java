@@ -26,27 +26,27 @@ public class ScreenshotApi {
     void success(T result);
     void error(Throwable error);
   }
-  private static class FlutterScreenshotApiCodec extends StandardMessageCodec {
-    public static final FlutterScreenshotApiCodec INSTANCE = new FlutterScreenshotApiCodec();
-    private FlutterScreenshotApiCodec() {}
+  private static class ScreenshotHostApiCodec extends StandardMessageCodec {
+    public static final ScreenshotHostApiCodec INSTANCE = new ScreenshotHostApiCodec();
+    private ScreenshotHostApiCodec() {}
   }
 
   /** Generated interface from Pigeon that represents a handler of messages from Flutter.*/
-  public interface FlutterScreenshotApi {
+  public interface ScreenshotHostApi {
     void takeScreenshot(Result<byte[]> result);
     void startListeningScreenshot();
     void stopListeningScreenshot();
 
-    /** The codec used by FlutterScreenshotApi. */
+    /** The codec used by ScreenshotHostApi. */
     static MessageCodec<Object> getCodec() {
-      return FlutterScreenshotApiCodec.INSTANCE;
+      return ScreenshotHostApiCodec.INSTANCE;
     }
 
-    /** Sets up an instance of `FlutterScreenshotApi` to handle messages through the `binaryMessenger`. */
-    static void setup(BinaryMessenger binaryMessenger, FlutterScreenshotApi api) {
+    /** Sets up an instance of `ScreenshotHostApi` to handle messages through the `binaryMessenger`. */
+    static void setup(BinaryMessenger binaryMessenger, ScreenshotHostApi api) {
       {
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.FlutterScreenshotApi.takeScreenshot", getCodec());
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.ScreenshotHostApi.takeScreenshot", getCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
@@ -75,7 +75,7 @@ public class ScreenshotApi {
       }
       {
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.FlutterScreenshotApi.startListeningScreenshot", getCodec());
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.ScreenshotHostApi.startListeningScreenshot", getCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
@@ -94,7 +94,7 @@ public class ScreenshotApi {
       }
       {
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.FlutterScreenshotApi.stopListeningScreenshot", getCodec());
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.ScreenshotHostApi.stopListeningScreenshot", getCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
@@ -113,27 +113,27 @@ public class ScreenshotApi {
       }
     }
   }
-  private static class NativeScreenshotApiCodec extends StandardMessageCodec {
-    public static final NativeScreenshotApiCodec INSTANCE = new NativeScreenshotApiCodec();
-    private NativeScreenshotApiCodec() {}
+  private static class ScreenshotFlutterApiCodec extends StandardMessageCodec {
+    public static final ScreenshotFlutterApiCodec INSTANCE = new ScreenshotFlutterApiCodec();
+    private ScreenshotFlutterApiCodec() {}
   }
 
   /** Generated class from Pigeon that represents Flutter messages that can be called from Java.*/
-  public static class NativeScreenshotApi {
+  public static class ScreenshotFlutterApi {
     private final BinaryMessenger binaryMessenger;
-    public NativeScreenshotApi(BinaryMessenger argBinaryMessenger){
+    public ScreenshotFlutterApi(BinaryMessenger argBinaryMessenger){
       this.binaryMessenger = argBinaryMessenger;
     }
     public interface Reply<T> {
       void reply(T reply);
     }
     static MessageCodec<Object> getCodec() {
-      return NativeScreenshotApiCodec.INSTANCE;
+      return ScreenshotFlutterApiCodec.INSTANCE;
     }
 
     public void onTakeScreenshot(@Nullable byte[] dataArg, Reply<Void> callback) {
       BasicMessageChannel<Object> channel =
-          new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.NativeScreenshotApi.onTakeScreenshot", getCodec());
+          new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.ScreenshotFlutterApi.onTakeScreenshot", getCodec());
       channel.send(new ArrayList<Object>(Arrays.asList(dataArg)), channelReply -> {
         callback.reply(null);
       });

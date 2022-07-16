@@ -2,7 +2,7 @@ import 'package:pigeon/pigeon.dart';
 
 /// Flutter call Native
 @HostApi()
-abstract class FlutterScreenshotApi {
+abstract class ScreenshotHostApi {
   @async
   Uint8List? takeScreenshot();
 
@@ -12,6 +12,6 @@ abstract class FlutterScreenshotApi {
 
 /// Native call Flutter
 @FlutterApi()
-abstract class NativeScreenshotApi {
+abstract class ScreenshotFlutterApi {
   void onTakeScreenshot(Uint8List? data);
 }

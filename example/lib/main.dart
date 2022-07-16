@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    FfNativeScreenshot().setup(NativeScreenshotApiImplements(context));
+    FfNativeScreenshot().setup(ScreenshotFlutterApiImplements(context));
     FfNativeScreenshot().startListeningScreenshot();
   }
 
@@ -80,11 +80,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> _listeningScreenshotTapped() async {
+  void _listeningScreenshotTapped() {
     if (FfNativeScreenshot().listening) {
-      await FfNativeScreenshot().stopListeningScreenshot();
+      FfNativeScreenshot().stopListeningScreenshot();
     } else {
-      await FfNativeScreenshot().startListeningScreenshot();
+      FfNativeScreenshot().startListeningScreenshot();
     }
     setState(() {});
   }
@@ -118,8 +118,8 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class NativeScreenshotApiImplements extends NativeScreenshotApi {
-  NativeScreenshotApiImplements(this.context);
+class ScreenshotFlutterApiImplements extends ScreenshotFlutterApi {
+  ScreenshotFlutterApiImplements(this.context);
   final BuildContext context;
   @override
   Future<void> onTakeScreenshot(Uint8List? data) async {

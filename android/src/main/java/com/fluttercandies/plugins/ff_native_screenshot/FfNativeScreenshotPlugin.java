@@ -33,9 +33,9 @@ import kotlin.jvm.internal.Intrinsics;
 /**
  * FfNativeScreenshotPlugin
  */
-public class FfNativeScreenshotPlugin implements FlutterPlugin, ScreenshotApi.FlutterScreenshotApi {
+public class FfNativeScreenshotPlugin implements FlutterPlugin, ScreenshotApi.ScreenshotHostApi {
 
-    private static ScreenshotApi.NativeScreenshotApi nativeScreenshotApi;
+    private static ScreenshotApi.ScreenshotFlutterApi nativeScreenshotApi;
     private Context context;
     private ActivityLifecycleCallbacks callbacks = new ActivityLifecycleCallbacks();
     private Handler handler;
@@ -43,8 +43,8 @@ public class FfNativeScreenshotPlugin implements FlutterPlugin, ScreenshotApi.Fl
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        ScreenshotApi.FlutterScreenshotApi.setup(flutterPluginBinding.getBinaryMessenger(), this);
-        nativeScreenshotApi = new ScreenshotApi.NativeScreenshotApi(flutterPluginBinding.getBinaryMessenger());
+        ScreenshotApi.ScreenshotHostApi.setup(flutterPluginBinding.getBinaryMessenger(), this);
+        nativeScreenshotApi = new ScreenshotApi.ScreenshotFlutterApi(flutterPluginBinding.getBinaryMessenger());
         context = flutterPluginBinding.getApplicationContext();
         if (context instanceof Application) {
             Application application = (Application) context;
@@ -55,7 +55,7 @@ public class FfNativeScreenshotPlugin implements FlutterPlugin, ScreenshotApi.Fl
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        ScreenshotApi.FlutterScreenshotApi.setup(binding.getBinaryMessenger(), null);
+        ScreenshotApi.ScreenshotHostApi.setup(binding.getBinaryMessenger(), null);
     }
 
 

@@ -8,23 +8,25 @@ import 'dart:typed_data' show Uint8List, Int32List, Int64List, Float64List;
 import 'package:flutter/foundation.dart' show WriteBuffer, ReadBuffer;
 import 'package:flutter/services.dart';
 
-class _FlutterScreenshotApiCodec extends StandardMessageCodec {
-  const _FlutterScreenshotApiCodec();
+class _ScreenshotHostApiCodec extends StandardMessageCodec {
+  const _ScreenshotHostApiCodec();
 }
 
-class FlutterScreenshotApi {
-  /// Constructor for [FlutterScreenshotApi].  The [binaryMessenger] named argument is
+class ScreenshotHostApi {
+  /// Constructor for [ScreenshotHostApi].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  FlutterScreenshotApi({BinaryMessenger? binaryMessenger}) : _binaryMessenger = binaryMessenger;
+  ScreenshotHostApi({BinaryMessenger? binaryMessenger})
+      : _binaryMessenger = binaryMessenger;
 
   final BinaryMessenger? _binaryMessenger;
 
-  static const MessageCodec<Object?> codec = _FlutterScreenshotApiCodec();
+  static const MessageCodec<Object?> codec = _ScreenshotHostApiCodec();
 
   Future<Uint8List?> takeScreenshot() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.FlutterScreenshotApi.takeScreenshot', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.ScreenshotHostApi.takeScreenshot', codec,
+        binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -33,7 +35,8 @@ class FlutterScreenshotApi {
         message: 'Unable to establish connection on channel.',
       );
     } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
       throw PlatformException(
         code: (error['code'] as String?)!,
         message: error['message'] as String?,
@@ -46,7 +49,8 @@ class FlutterScreenshotApi {
 
   Future<void> startListeningScreenshot() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.FlutterScreenshotApi.startListeningScreenshot', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.ScreenshotHostApi.startListeningScreenshot', codec,
+        binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -55,7 +59,8 @@ class FlutterScreenshotApi {
         message: 'Unable to establish connection on channel.',
       );
     } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
       throw PlatformException(
         code: (error['code'] as String?)!,
         message: error['message'] as String?,
@@ -68,7 +73,8 @@ class FlutterScreenshotApi {
 
   Future<void> stopListeningScreenshot() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.FlutterScreenshotApi.stopListeningScreenshot', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.ScreenshotHostApi.stopListeningScreenshot', codec,
+        binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -77,7 +83,8 @@ class FlutterScreenshotApi {
         message: 'Unable to establish connection on channel.',
       );
     } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
       throw PlatformException(
         code: (error['code'] as String?)!,
         message: error['message'] as String?,
@@ -89,22 +96,26 @@ class FlutterScreenshotApi {
   }
 }
 
-class _NativeScreenshotApiCodec extends StandardMessageCodec {
-  const _NativeScreenshotApiCodec();
+class _ScreenshotFlutterApiCodec extends StandardMessageCodec {
+  const _ScreenshotFlutterApiCodec();
 }
-abstract class NativeScreenshotApi {
-  static const MessageCodec<Object?> codec = _NativeScreenshotApiCodec();
+
+abstract class ScreenshotFlutterApi {
+  static const MessageCodec<Object?> codec = _ScreenshotFlutterApiCodec();
 
   void onTakeScreenshot(Uint8List? data);
-  static void setup(NativeScreenshotApi? api, {BinaryMessenger? binaryMessenger}) {
+  static void setup(ScreenshotFlutterApi? api,
+      {BinaryMessenger? binaryMessenger}) {
     {
       final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.NativeScreenshotApi.onTakeScreenshot', codec, binaryMessenger: binaryMessenger);
+          'dev.flutter.pigeon.ScreenshotFlutterApi.onTakeScreenshot', codec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
         channel.setMessageHandler(null);
       } else {
         channel.setMessageHandler((Object? message) async {
-          assert(message != null, 'Argument for dev.flutter.pigeon.NativeScreenshotApi.onTakeScreenshot was null.');
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.ScreenshotFlutterApi.onTakeScreenshot was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final Uint8List? arg_data = (args[0] as Uint8List?);
           api.onTakeScreenshot(arg_data);

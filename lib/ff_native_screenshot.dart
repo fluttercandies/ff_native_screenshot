@@ -5,29 +5,33 @@ import 'src/ff_native_screenshot.dart';
 
 export 'src/ff_native_screenshot.dart';
 
+/// The util of NativeScreenshot
 class FfNativeScreenshot {
   factory FfNativeScreenshot() => _ffNativeScreenshot;
   FfNativeScreenshot._();
   static final FfNativeScreenshot _ffNativeScreenshot = FfNativeScreenshot._();
-  final FlutterScreenshotApi _flutterScreenshotApi = FlutterScreenshotApi();
+  final ScreenshotHostApi _flutterScreenshotApi = ScreenshotHostApi();
 
   /// take screenshot by native
   Future<Uint8List?> takeScreenshot() => _flutterScreenshotApi.takeScreenshot();
 
-  void setup(NativeScreenshotApi api) => NativeScreenshotApi.setup(api);
+  /// ScreenshotFlutterApi setup
+  void setup(ScreenshotFlutterApi api) => ScreenshotFlutterApi.setup(api);
 
   bool _listening = false;
 
   /// whether is listening Screenshot
   bool get listening => _listening;
 
-  Future<void> startListeningScreenshot() async {
-    await _flutterScreenshotApi.startListeningScreenshot();
+  /// start listening Screenshot
+  void startListeningScreenshot() {
     _listening = true;
+    _flutterScreenshotApi.startListeningScreenshot();
   }
 
-  Future<void> stopListeningScreenshot() async {
-    await _flutterScreenshotApi.stopListeningScreenshot();
+  /// stop listening Screenshot
+  void stopListeningScreenshot() {
     _listening = false;
+    _flutterScreenshotApi.stopListeningScreenshot();
   }
 }

@@ -1,5 +1,5 @@
 #import <Flutter/Flutter.h>
 #import "ScreenshotApi.h"
 
-@interface FfNativeScreenshotPlugin : NSObject<FlutterPlugin,FLTFlutterScreenshotApi>
+@interface FfNativeScreenshotPlugin : NSObject<FlutterPlugin,FLTScreenshotHostApi>
 @end

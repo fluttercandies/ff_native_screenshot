@@ -1,10 +1,10 @@
 #import "FfNativeScreenshotPlugin.h"
-static FLTNativeScreenshotApi *nativeScreenshotApi;
+static FLTScreenshotFlutterApi *screenshotFlutterApi;
 @implementation FfNativeScreenshotPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     FfNativeScreenshotPlugin* instance = [[FfNativeScreenshotPlugin alloc] init];
-    FLTFlutterScreenshotApiSetup(registrar.messenger,instance);
-    nativeScreenshotApi = [[FLTNativeScreenshotApi alloc] initWithBinaryMessenger: registrar.messenger ];
+    FLTScreenshotHostApiSetup(registrar.messenger,instance);
+    screenshotFlutterApi = [[FLTScreenshotFlutterApi alloc] initWithBinaryMessenger: registrar.messenger ];
 }
 
 
@@ -27,7 +27,7 @@ static FLTNativeScreenshotApi *nativeScreenshotApi;
 - (void)onTakeScreenShoot:(NSNotification *)notification{
     
     FlutterStandardTypedData *data = [self takeScreenshot];
-    [nativeScreenshotApi onTakeScreenshotData:data completion:^(NSError * _Nullable error) {
+    [screenshotFlutterApi onTakeScreenshotData:data completion:^(NSError * _Nullable error) {
         
     }];
 }
@@ -49,14 +49,11 @@ static FLTNativeScreenshotApi *nativeScreenshotApi;
         NSData *imageData= UIImageJPEGRepresentation(image, 1.0f);
         FlutterStandardTypedData *data  = [FlutterStandardTypedData typedDataWithBytes:imageData];
         return  data;
-        
-        
     } @catch (NSException *exception) {
         NSLog(@"%@",exception);
         return nil;
-        
     } @finally {
-        return nil;
+
     }
 
 }

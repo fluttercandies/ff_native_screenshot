@@ -9,21 +9,21 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-/// The codec used by FLTFlutterScreenshotApi.
-NSObject<FlutterMessageCodec> *FLTFlutterScreenshotApiGetCodec(void);
+/// The codec used by FLTScreenshotHostApi.
+NSObject<FlutterMessageCodec> *FLTScreenshotHostApiGetCodec(void);
 
-@protocol FLTFlutterScreenshotApi
+@protocol FLTScreenshotHostApi
 - (void)takeScreenshotWithCompletion:(void(^)(FlutterStandardTypedData *_Nullable, FlutterError *_Nullable))completion;
 - (void)startListeningScreenshotWithError:(FlutterError *_Nullable *_Nonnull)error;
 - (void)stopListeningScreenshotWithError:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
-extern void FLTFlutterScreenshotApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLTFlutterScreenshotApi> *_Nullable api);
+extern void FLTScreenshotHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLTScreenshotHostApi> *_Nullable api);
 
-/// The codec used by FLTNativeScreenshotApi.
-NSObject<FlutterMessageCodec> *FLTNativeScreenshotApiGetCodec(void);
+/// The codec used by FLTScreenshotFlutterApi.
+NSObject<FlutterMessageCodec> *FLTScreenshotFlutterApiGetCodec(void);
 
-@interface FLTNativeScreenshotApi : NSObject
+@interface FLTScreenshotFlutterApi : NSObject
 - (instancetype)initWithBinaryMessenger:(id<FlutterBinaryMessenger>)binaryMessenger;
 - (void)onTakeScreenshotData:(nullable FlutterStandardTypedData *)data completion:(void(^)(NSError *_Nullable))completion;
 @end
