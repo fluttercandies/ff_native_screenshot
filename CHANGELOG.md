@@ -1,3 +1,7 @@
+## 0.0.3
+
+* dispose screenshotFlutterApi when onDetachedFromEngine
+
 ## 0.0.2
 
 * dart format

@@ -35,7 +35,7 @@ import kotlin.jvm.internal.Intrinsics;
  */
 public class FfNativeScreenshotPlugin implements FlutterPlugin, ScreenshotApi.ScreenshotHostApi {
 
-    private static ScreenshotApi.ScreenshotFlutterApi nativeScreenshotApi;
+    private ScreenshotApi.ScreenshotFlutterApi screenshotFlutterApi;
     private Context context;
     private ActivityLifecycleCallbacks callbacks = new ActivityLifecycleCallbacks();
     private Handler handler;
@@ -44,7 +44,7 @@ public class FfNativeScreenshotPlugin implements FlutterPlugin, ScreenshotApi.Sc
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         ScreenshotApi.ScreenshotHostApi.setup(flutterPluginBinding.getBinaryMessenger(), this);
-        nativeScreenshotApi = new ScreenshotApi.ScreenshotFlutterApi(flutterPluginBinding.getBinaryMessenger());
+        screenshotFlutterApi = new ScreenshotApi.ScreenshotFlutterApi(flutterPluginBinding.getBinaryMessenger());
         context = flutterPluginBinding.getApplicationContext();
         if (context instanceof Application) {
             Application application = (Application) context;
@@ -56,6 +56,7 @@ public class FfNativeScreenshotPlugin implements FlutterPlugin, ScreenshotApi.Sc
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         ScreenshotApi.ScreenshotHostApi.setup(binding.getBinaryMessenger(), null);
+        screenshotFlutterApi=null;
     }
 
 
@@ -177,8 +178,8 @@ public class FfNativeScreenshotPlugin implements FlutterPlugin, ScreenshotApi.Sc
                 outputStream.write(buffer, 0, len);
             }
             byte[] imageInByte = outputStream.toByteArray();
-            if (nativeScreenshotApi != null) {
-                nativeScreenshotApi.onTakeScreenshot(imageInByte, null);
+            if (screenshotFlutterApi != null) {
+                screenshotFlutterApi.onTakeScreenshot(imageInByte, null);
             }
         } catch (Exception e) {
             Log.e("onTakeScreenshot", e.getMessage());
@@ -195,8 +196,8 @@ public class FfNativeScreenshotPlugin implements FlutterPlugin, ScreenshotApi.Sc
     class TakeScreenshotResult implements ScreenshotApi.Result<byte[]> {
         @Override
         public void success(byte[] result) {
-            if (nativeScreenshotApi != null) {
-                nativeScreenshotApi.onTakeScreenshot(result, null);
+            if (screenshotFlutterApi != null) {
+                screenshotFlutterApi.onTakeScreenshot(result, null);
             }
         }
         @Override
