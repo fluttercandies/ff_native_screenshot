@@ -1,3 +1,7 @@
+## 0.0.4
+
+* change Screenshot ImageType from JPEG to PNG on Android
+
 ## 0.0.3
 
 * dispose screenshotFlutterApi when onDetachedFromEngine

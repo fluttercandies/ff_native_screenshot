@@ -162,7 +162,7 @@ public class FfNativeScreenshotPlugin implements FlutterPlugin, ScreenshotApi.Sc
 
     private void takeScreenshotResult(Bitmap bitmap, ScreenshotApi.Result<byte[]> result) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] imageInByte = stream.toByteArray();
         result.success(imageInByte);
     }

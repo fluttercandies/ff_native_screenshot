@@ -1,6 +1,6 @@
 name: ff_native_screenshot
 description: A Flutter plugin to take or listen screenshot(support Platform Views) for Android and iOS with native code.
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/fluttercandies/ff_native_screenshot
 
 environment:
