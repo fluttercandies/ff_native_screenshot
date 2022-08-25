@@ -1,3 +1,9 @@
+## 1.0.0
+
+* android: breaking change, need READ_EXTERNAL_STORAGE permission for android now(some android versions need it).
+* android: ContentObserver instead of FileObserver
+* android: avoid multiple triggers
+
 ## 0.0.4
 
 * change Screenshot ImageType from JPEG to PNG on Android

@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ff_native_screenshot/ff_native_screenshot.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 void main() {
@@ -35,18 +37,52 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    init();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  Future<void> init() async {
+    if (Platform.isAndroid) {
+      await Permission.storage.request();
+    }
     FfNativeScreenshot().setup(ScreenshotFlutterApiImplements(context));
-    FfNativeScreenshot().startListeningScreenshot();
+    await FfNativeScreenshot().startListeningScreenshot();
+
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
   void dispose() {
     FfNativeScreenshot().stopListeningScreenshot();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  bool? listening;
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        if (listening == true && !FfNativeScreenshot().listening) {
+          FfNativeScreenshot().startListeningScreenshot();
+        }
+        break;
+      case AppLifecycleState.paused:
+        listening = FfNativeScreenshot().listening;
+        if (listening == true) {
+          FfNativeScreenshot().stopListeningScreenshot();
+        }
+
+        break;
+      default:
+    }
   }
 
   @override
@@ -74,19 +110,34 @@ class _HomePageState extends State<HomePage> {
                   : const Icon(Icons.start))
         ],
       ),
-      body: const WebView(
+      body: WebView(
         initialUrl: 'https://flutter.cn',
+        //
+        // android
+        // initExpensiveAndroidView
+        // On some Android devices, transparent backgrounds can cause
+        // rendering issues on the non hybrid composition
+        // AndroidViewSurface. This switches the WebView to Hybrid
+        // Composition when the background color is not 100% opaque.
+        // hybridComposition:
+        // backgroundColor != null && backgroundColor.opacity < 1.0,
+
+        // if we don't use initExpensiveAndroidView, can't get shotshot from currentActivity
+        backgroundColor:
+            Platform.isAndroid ? Colors.white.withOpacity(0.99) : null,
       ),
     );
   }
 
-  void _listeningScreenshotTapped() {
+  Future<void> _listeningScreenshotTapped() async {
     if (FfNativeScreenshot().listening) {
-      FfNativeScreenshot().stopListeningScreenshot();
+      await FfNativeScreenshot().stopListeningScreenshot();
     } else {
-      FfNativeScreenshot().startListeningScreenshot();
+      await FfNativeScreenshot().startListeningScreenshot();
     }
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   Future<void> takeScreenshot(BuildContext context) async {

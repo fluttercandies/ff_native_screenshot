@@ -24,14 +24,26 @@ class FfNativeScreenshot {
   bool get listening => _listening;
 
   /// start listening Screenshot
-  void startListeningScreenshot() {
-    _listening = true;
-    _flutterScreenshotApi.startListeningScreenshot();
+  Future<void> startListeningScreenshot() async {
+    try {
+      if (!_listening) {
+        _listening = true;
+        _flutterScreenshotApi.startListeningScreenshot();
+      }
+    } catch (e) {
+      _listening = false;
+    }
   }
 
   /// stop listening Screenshot
-  void stopListeningScreenshot() {
-    _listening = false;
-    _flutterScreenshotApi.stopListeningScreenshot();
+  Future<void> stopListeningScreenshot() async {
+    try {
+      if (_listening) {
+        _listening = false;
+        _flutterScreenshotApi.stopListeningScreenshot();
+      }
+    } catch (e) {
+      _listening = true;
+    }
   }
 }

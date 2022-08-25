@@ -39,7 +39,9 @@ public class FfNativeScreenshotPlugin implements FlutterPlugin, ScreenshotApi.Sc
     private Context context;
     private ActivityLifecycleCallbacks callbacks = new ActivityLifecycleCallbacks();
     private Handler handler;
-    private FileObserver fileObserver;
+    //private FileObserver fileObserver;
+    private ScreenshotDetector detector;
+    //private String lastScreenshotFileName;
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -56,7 +58,7 @@ public class FfNativeScreenshotPlugin implements FlutterPlugin, ScreenshotApi.Sc
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         ScreenshotApi.ScreenshotHostApi.setup(binding.getBinaryMessenger(), null);
-        screenshotFlutterApi=null;
+        screenshotFlutterApi = null;
     }
 
 
@@ -107,57 +109,73 @@ public class FfNativeScreenshotPlugin implements FlutterPlugin, ScreenshotApi.Sc
     @Override
     public void startListeningScreenshot() {
         handler = new Handler(Looper.getMainLooper());
-        if (Build.VERSION.SDK_INT >= 29) {
-            final List<File> files = new ArrayList<>();
-            final List<String> paths = new ArrayList<>();
-            for (Path path : Path.values()) {
-                files.add(new File(path.getPath()));
-                paths.add(path.getPath());
-            }
-            fileObserver = new FileObserver(files) {
-                @Override
-                public void onEvent(int event, final String filename) {
-                    if (event == FileObserver.CREATE) {
-                        handler.post(() -> {
-                            for (String fullPath : paths) {
-                                File file = new File(fullPath + filename);
-                                if (file.exists()) {
-                                    if (getMimeType(file.getPath()).contains("image")) {
-                                        onTakeScreenshot();
-                                    }
-                                }
-                            }
-                        });
-                    }
-                }
-            };
-            fileObserver.startWatching();
-        } else {
-            for (final Path path : Path.values()) {
-                fileObserver = new FileObserver(path.getPath()) {
-                    @Override
-                    public void onEvent(int event, final String filename) {
 
-                        File file = new File(path.getPath() + filename);
-                        if (event == FileObserver.CREATE) {
-                            handler.post(() -> {
-                                if (file.exists()) {
-                                    if (getMimeType(file.getPath()).contains("image")) {
-                                        onTakeScreenshot();
-                                    }
-                                }
-                            });
-                        }
-                    }
-                };
-                fileObserver.startWatching();
-            }
-        }
+        detector = new ScreenshotDetector(context, () -> {
+            handler.post(() -> {
+                onTakeScreenshot();
+            });
+        });
+        detector.start();
+//
+//       if (Build.VERSION.SDK_INT >= 29) {
+//           final List<File> files = new ArrayList<>();
+//           final List<String> paths = new ArrayList<>();
+//           for (Path path : Path.values()) {
+//               files.add(new File(path.getPath()));
+//               paths.add(path.getPath());
+//           }
+//           fileObserver = new FileObserver(files) {
+//               @Override
+//               public void onEvent(int event, final String filename) {
+//                   if (event == FileObserver.CREATE) {
+//                       handler.post(() -> {
+//                           for (String fullPath : paths) {
+//                               File file = new File(fullPath + filename);
+//                               handleScreenshot(file);
+//                           }
+//                       });
+//                   }
+//               }
+//           };
+//           fileObserver.startWatching();
+//       } else {
+//           for (final Path path : Path.values()) {
+//               fileObserver = new FileObserver(path.getPath()) {
+//                   @Override
+//                   public void onEvent(int event, final String filename) {
+//
+//                       File file = new File(path.getPath() + filename);
+//                       if (event == FileObserver.CREATE) {
+//                           handler.post(() -> {
+//                               handleScreenshot(file);
+//                           });
+//                       }
+//                   }
+//               };
+//               fileObserver.startWatching();
+//           }
+//       }
     }
+
+//    private void handleScreenshot(File file) {
+//        if (file.exists()) {
+//            String path = file.getPath();
+//            if (lastScreenshotFileName!=path && getMimeType(file.getPath()).contains("image")) {
+//                lastScreenshotFileName = path;
+//                onTakeScreenshot();
+//            }
+//        }
+//    }
 
     @Override
     public void stopListeningScreenshot() {
-        if (fileObserver != null) fileObserver.stopWatching();
+
+//        if (fileObserver != null) fileObserver.stopWatching();
+//        lastScreenshotFileName = null;
+        if (detector != null) {
+            detector.stop();
+            detector = null;
+        }
     }
 
     private void takeScreenshotResult(Bitmap bitmap, ScreenshotApi.Result<byte[]> result) {
@@ -179,7 +197,8 @@ public class FfNativeScreenshotPlugin implements FlutterPlugin, ScreenshotApi.Sc
             }
             byte[] imageInByte = outputStream.toByteArray();
             if (screenshotFlutterApi != null) {
-                screenshotFlutterApi.onTakeScreenshot(imageInByte, null);
+                screenshotFlutterApi.onTakeScreenshot(imageInByte, (v) -> {
+                });
             }
         } catch (Exception e) {
             Log.e("onTakeScreenshot", e.getMessage());
@@ -197,9 +216,11 @@ public class FfNativeScreenshotPlugin implements FlutterPlugin, ScreenshotApi.Sc
         @Override
         public void success(byte[] result) {
             if (screenshotFlutterApi != null) {
-                screenshotFlutterApi.onTakeScreenshot(result, null);
+                screenshotFlutterApi.onTakeScreenshot(result, (v) -> {
+                });
             }
         }
+
         @Override
         public void error(Throwable error) {
             Log.e("takeScreenshot", error.getMessage());
