@@ -1,0 +1,12 @@
+{
+  name: 'entry',
+  version: '1.0.0',
+  description: 'Please describe the basic information.',
+  main: '',
+  author: '',
+  license: '',
+  dependencies: {
+    '@ohos/ff_native_screenshot': 'file:./har/ff_native_screenshot.har',
+    '@ohos/webview_flutter_ohos': 'file:./har/webview_flutter_ohos.har',
+  },
+}

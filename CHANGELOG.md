@@ -1,3 +1,7 @@
+## 2.0.0
+
+* Support OpenHarmony
+
 ## 1.0.0
 
 * android: breaking change, need READ_EXTERNAL_STORAGE permission for android now(some android versions need it).

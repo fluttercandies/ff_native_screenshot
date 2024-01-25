@@ -15,6 +15,12 @@ dependencies:
   permission_handler: any
 ```
 
+## Platform Support
+
+| Android | iOS | OpenHarmony | 
+| :-----: | :-: | :---: | 
+|   ✅    | ✅  |  ✅   | 
+
 ## Take Screenshot
 
 ``` dart

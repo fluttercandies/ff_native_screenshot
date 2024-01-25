@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -38,11 +37,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+  //late final WebViewController controller = WebViewController();
+
   @override
   void initState() {
     super.initState();
     init();
     WidgetsBinding.instance.addObserver(this);
+    //controller.loadRequest(Uri.parse('https://flutter.cn'));
   }
 
   Future<void> init() async {
@@ -110,22 +112,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   : const Icon(Icons.start))
         ],
       ),
-      body: WebView(
-        initialUrl: 'https://flutter.cn',
-        //
-        // android
-        // initExpensiveAndroidView
-        // On some Android devices, transparent backgrounds can cause
-        // rendering issues on the non hybrid composition
-        // AndroidViewSurface. This switches the WebView to Hybrid
-        // Composition when the background color is not 100% opaque.
-        // hybridComposition:
-        // backgroundColor != null && backgroundColor.opacity < 1.0,
-
-        // if we don't use initExpensiveAndroidView, can't get shotshot from currentActivity
-        backgroundColor:
-            Platform.isAndroid ? Colors.white.withOpacity(0.99) : null,
-      ),
+      body: Container(),
+      // TODO: wait to support external texture
+      //WebViewWidget(controller: controller),
     );
   }
 

@@ -1,0 +1,10 @@
+{
+  "module": {
+    "name": "ff_native_screenshot",
+    "type": "har",
+    "deviceTypes": [
+      "default",
+      "tablet"
+    ]
+  }
+}
